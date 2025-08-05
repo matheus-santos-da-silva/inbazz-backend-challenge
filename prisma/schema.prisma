@@ -6,3 +6,29 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model Todo {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  status      Status   @default(PENDING)
+  category    Category @relation(fields: [categoryId], references: [id])
+  categoryId  String
+  createdAt   DateTime @default(now())
+
+  @@map("todos")
+}
+
+model Category {
+  id          String @id @default(uuid())
+  name        String
+  description String
+  todos       Todo[]
+
+  @@map("categories")
+}
+
+enum Status {
+  PENDING
+  COMPLETED
+}
