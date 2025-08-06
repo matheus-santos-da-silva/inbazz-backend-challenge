@@ -1,6 +1,10 @@
 FROM node:alpine
 
 WORKDIR /app
-COPY . .
+COPY package.json yarn.lock ./
 RUN yarn install
-CMD ["sh", "-c", "yarn prisma generate && yarn prisma db push && yarn run build && yarn run start:prod"]
+COPY . .
+RUN yarn prisma generate
+RUN yarn build
+
+CMD ["yarn", "start:prod"]
