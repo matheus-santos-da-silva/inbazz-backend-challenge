@@ -3,4 +3,5 @@ import { CreateCategoryDTO } from "src/presentation/categories/dtos/create-categ
 
 export abstract class CategoryRepositoryProtocol {
   abstract create(data: CreateCategoryDTO): Promise<Category>;
+  abstract findAll(): Promise<Category[]>;
 }
