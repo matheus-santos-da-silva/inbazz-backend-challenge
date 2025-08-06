@@ -19,6 +19,17 @@ export class CategoryRepository implements CategoryRepositoryProtocol {
     }
   }
 
+  async findById(id: string): Promise<Category> {
+    try {
+      const category = await this.prisma.category.findUnique({ where: { id } });
+      return category;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        "Erro inesperado ao encontrar a categoria!"
+      );
+    }
+  }
+
   async findAll(): Promise<Category[]> {
     try {
       const categories = await this.prisma.category.findMany();
