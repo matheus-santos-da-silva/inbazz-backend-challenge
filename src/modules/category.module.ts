@@ -6,6 +6,7 @@ import { CategoryRepositoryProtocol } from "src/infra/categories/repositories/ca
 import {
   CreateCategoryService,
   GetCategoriesService,
+  FindCategoryService,
 } from "src/application/categories/use-cases/";
 
 @Module({
@@ -14,6 +15,7 @@ import {
   providers: [
     CreateCategoryService,
     GetCategoriesService,
+    FindCategoryService,
     {
       provide: CategoryRepositoryProtocol,
       useClass: CategoryRepository,
