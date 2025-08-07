@@ -1,12 +1,22 @@
 import { CreateCategoryDTO } from "./dtos/create-category.dto";
-import { HttpBadRequestError } from "../swagger/http-errors";
 import { CategoryResponseViewModel } from "./view-models/category-vm";
-import { Body, Controller, Get, Param, Post } from "@nestjs/common";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { HttpBadRequestError, HttpNotFoundError } from "../swagger/http-errors";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+} from "@nestjs/common";
 import {
   CreateCategoryService,
   GetCategoriesService,
   FindCategoryService,
+  DeleteCategoryService,
 } from "src/application/categories/use-cases/";
 
 @ApiTags("Categories")
@@ -15,7 +25,8 @@ export class CategoryController {
   constructor(
     private readonly createCategory: CreateCategoryService,
     private readonly getCategories: GetCategoriesService,
-    private readonly findCategory: FindCategoryService
+    private readonly findCategory: FindCategoryService,
+    private readonly deleteCategory: DeleteCategoryService
   ) {}
 
   @ApiOperation({ summary: "Create Category" })
@@ -61,13 +72,29 @@ export class CategoryController {
     type: CategoryResponseViewModel,
   })
   @Get(":id")
-  @ApiResponse(HttpBadRequestError)
+  @ApiResponse(HttpNotFoundError)
   async getCategory(
     @Param("id") id: string
   ): Promise<CategoryResponseViewModel> {
     try {
       const category = await this.findCategory.findById(id);
       return category;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @ApiOperation({ summary: "Delete Category" })
+  @ApiResponse({
+    status: 204,
+    description: "Success",
+  })
+  @Delete(":id")
+  @ApiResponse(HttpNotFoundError)
+  @HttpCode(204)
+  async delete(@Param("id") id: string): Promise<void> {
+    try {
+      await this.deleteCategory.delete(id);
     } catch (error) {
       throw error;
     }
