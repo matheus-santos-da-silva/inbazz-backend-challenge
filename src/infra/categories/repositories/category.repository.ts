@@ -40,4 +40,14 @@ export class CategoryRepository implements CategoryRepositoryProtocol {
       );
     }
   }
+
+  async delete(id: string): Promise<void> {
+    try {
+      await this.prisma.category.delete({ where: { id } });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        "Erro inesperado ao deletar a categoria!"
+      );
+    }
+  }
 }

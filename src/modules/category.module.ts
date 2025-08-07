@@ -7,6 +7,7 @@ import {
   CreateCategoryService,
   GetCategoriesService,
   FindCategoryService,
+  DeleteCategoryService,
 } from "src/application/categories/use-cases/";
 
 @Module({
@@ -16,6 +17,7 @@ import {
     CreateCategoryService,
     GetCategoriesService,
     FindCategoryService,
+    DeleteCategoryService,
     {
       provide: CategoryRepositoryProtocol,
       useClass: CategoryRepository,

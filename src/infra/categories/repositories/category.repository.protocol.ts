@@ -5,4 +5,5 @@ export abstract class CategoryRepositoryProtocol {
   abstract create(data: CreateCategoryDTO): Promise<Category>;
   abstract findAll(): Promise<Category[]>;
   abstract findById(id: string): Promise<Category>;
+  abstract delete(id: string): Promise<void>;
 }
