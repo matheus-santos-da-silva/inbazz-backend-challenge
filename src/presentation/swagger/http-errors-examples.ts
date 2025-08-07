@@ -24,7 +24,7 @@ export class NotFoundResponseExample {
   statusCode: number;
 
   @ApiProperty({
-    example: "Funcionalidade não encontrada",
+    example: "Recurso não encontrado",
   })
   message: string;
 
