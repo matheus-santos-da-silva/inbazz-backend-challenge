@@ -7,6 +7,7 @@ import {
   CreateCategoryService,
   GetCategoriesService,
   FindCategoryService,
+  UpdateCategoryService,
   DeleteCategoryService,
 } from "src/application/categories/use-cases/";
 
@@ -17,6 +18,7 @@ import {
     CreateCategoryService,
     GetCategoriesService,
     FindCategoryService,
+    UpdateCategoryService,
     DeleteCategoryService,
     {
       provide: CategoryRepositoryProtocol,
