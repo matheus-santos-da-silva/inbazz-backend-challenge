@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString } from "class-validator";
 
-export class CreateCategoryDTO {
+export class CategoryInputDTO {
   @ApiProperty({ example: "Trabalho" })
   @IsNotEmpty({ message: "O nome da categoria é obrigatório!" })
   @IsString({ message: "O nome deve ser uma string!" })

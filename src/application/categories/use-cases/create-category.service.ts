@@ -1,5 +1,5 @@
 import { Category } from "src/domain/categories/category.entity";
-import { CreateCategoryDTO } from "src/presentation/categories/dtos/create-category.dto";
+import { CategoryInputDTO } from "src/presentation/categories/dtos/category-input.dto";
 import { CategoryRepositoryProtocol } from "src/infra/categories/repositories/category.repository.protocol";
 import { CreateCategoryServiceProtocol } from "./protocols/create-category-service-protocol";
 import { BadRequestException, Injectable } from "@nestjs/common";
@@ -10,7 +10,7 @@ export class CreateCategoryService implements CreateCategoryServiceProtocol {
     private readonly categoryRepository: CategoryRepositoryProtocol
   ) {}
 
-  async create(data: CreateCategoryDTO): Promise<Category> {
+  async create(data: CategoryInputDTO): Promise<Category> {
     try {
       const category = await this.categoryRepository.create(data);
       if (!category) {
