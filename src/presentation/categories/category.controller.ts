@@ -1,4 +1,4 @@
-import { CreateCategoryDTO } from "./dtos/create-category.dto";
+import { CategoryInputDTO } from "./dtos/category-input.dto";
 import { CategoryResponseViewModel } from "./view-models/category-vm";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { HttpBadRequestError, HttpNotFoundError } from "../swagger/http-errors";
@@ -8,14 +8,15 @@ import {
   Delete,
   Get,
   HttpCode,
-  HttpStatus,
   Param,
   Post,
+  Put,
 } from "@nestjs/common";
 import {
   CreateCategoryService,
   GetCategoriesService,
   FindCategoryService,
+  UpdateCategoryService,
   DeleteCategoryService,
 } from "src/application/categories/use-cases/";
 
@@ -26,6 +27,7 @@ export class CategoryController {
     private readonly createCategory: CreateCategoryService,
     private readonly getCategories: GetCategoriesService,
     private readonly findCategory: FindCategoryService,
+    private readonly updateCategory: UpdateCategoryService,
     private readonly deleteCategory: DeleteCategoryService
   ) {}
 
@@ -38,7 +40,7 @@ export class CategoryController {
   @ApiResponse(HttpBadRequestError)
   @Post()
   async create(
-    @Body() data: CreateCategoryDTO
+    @Body() data: CategoryInputDTO
   ): Promise<CategoryResponseViewModel> {
     try {
       const category = await this.createCategory.create(data);
@@ -79,6 +81,27 @@ export class CategoryController {
     try {
       const category = await this.findCategory.findById(id);
       return category;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @ApiOperation({ summary: "Update Category" })
+  @ApiResponse({
+    status: 200,
+    description: "Success",
+    type: CategoryResponseViewModel,
+  })
+  @Put(":id")
+  @ApiResponse(HttpBadRequestError)
+  @ApiResponse(HttpNotFoundError)
+  async update(
+    @Param("id") id: string,
+    @Body() data: CategoryInputDTO
+  ): Promise<CategoryResponseViewModel> {
+    try {
+      const updatedCategory = await this.updateCategory.update(id, data);
+      return updatedCategory;
     } catch (error) {
       throw error;
     }
