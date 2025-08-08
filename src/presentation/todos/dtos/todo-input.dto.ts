@@ -1,16 +1,20 @@
 import { Status } from "@prisma/client";
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNotEmpty, IsString, IsUUID } from "class-validator";
+import { IsEnum, IsNotEmpty, IsString, IsUUID, Length } from "class-validator";
 
 export class TodoInputDTO {
   @ApiProperty({ example: "Fazer Planilha" })
   @IsNotEmpty({ message: "O título da tarefa é obrigatório!" })
   @IsString({ message: "O título deve ser uma string!" })
+  @Length(3, 100, { message: "O título precisa ter entre 3 a 100 caracteres!" })
   title: string;
 
   @ApiProperty({ example: "Terminar planilha de produtos que meu chefe pediu" })
   @IsNotEmpty({ message: "A descrição da categoria é obrigatória!" })
   @IsString({ message: "A descrição deve ser uma string!" })
+  @Length(3, 255, {
+    message: "A descrição precisa ter entre 3 a 100 caracteres!",
+  })
   description: string;
 
   @ApiProperty({
