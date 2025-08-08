@@ -39,4 +39,28 @@ export class TodoRepository implements TodoRepositoryProtocol {
       );
     }
   }
+
+  async findById(id: string): Promise<FindTodoResponseViewModel> {
+    try {
+      const todo = await this.prisma.todo.findUnique({
+        where: {
+          id,
+        },
+        select: {
+          id: true,
+          title: true,
+          status: true,
+          description: true,
+          createdAt: true,
+          category: true,
+        },
+      });
+
+      return todo;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        "Erro inesperado ao encontrar a tarefa!"
+      );
+    }
+  }
 }

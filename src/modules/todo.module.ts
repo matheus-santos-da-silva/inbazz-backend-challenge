@@ -8,6 +8,7 @@ import { CategoryRepositoryProtocol } from "src/infra/categories/repositories/ca
 import {
   CreateTodoService,
   GetTodosService,
+  FindTodoService,
 } from "src/application/todos/use-cases";
 
 @Module({
@@ -16,6 +17,7 @@ import {
   providers: [
     CreateTodoService,
     GetTodosService,
+    FindTodoService,
     {
       provide: TodoRepositoryProtocol,
       useClass: TodoRepository,

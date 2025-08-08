@@ -7,12 +7,14 @@ import { HttpBadRequestError, HttpNotFoundError } from "../swagger/http-errors";
 import {
   CreateTodoService,
   GetTodosService,
+  FindTodoService,
 } from "src/application/todos/use-cases/";
 import {
   Body,
   ClassSerializerInterceptor,
   Controller,
   Get,
+  Param,
   Post,
   UseInterceptors,
 } from "@nestjs/common";
@@ -22,7 +24,8 @@ import {
 export class TodoController {
   constructor(
     private readonly createTodo: CreateTodoService,
-    private readonly getTodos: GetTodosService
+    private readonly getTodos: GetTodosService,
+    private readonly findTodo: FindTodoService
   ) {}
 
   @ApiOperation({ summary: "Create Todo" })
@@ -52,10 +55,27 @@ export class TodoController {
     isArray: true,
   })
   @Get()
-  async getAll(): Promise<FindTodoResponseViewModel[]> {
+  async getAllTodos(): Promise<FindTodoResponseViewModel[]> {
     try {
       const todos = await this.getTodos.findAll();
       return todos;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @ApiOperation({ summary: "Get a Todo" })
+  @ApiResponse({
+    status: 200,
+    description: "Success",
+    type: FindTodoResponseViewModel,
+  })
+  @ApiResponse(HttpNotFoundError)
+  @Get(":id")
+  async getTodo(@Param("id") id: string): Promise<FindTodoResponseViewModel> {
+    try {
+      const todo = await this.findTodo.findById(id);
+      return todo;
     } catch (error) {
       throw error;
     }
