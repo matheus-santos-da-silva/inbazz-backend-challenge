@@ -2,6 +2,7 @@ import { Todo } from "src/domain/todos/todo.entity";
 import { TodoInputDTO } from "src/presentation/todos/dtos/todo-input.dto";
 import { PrismaService } from "src/infra/database/config/prisma.service";
 import { TodoRepositoryProtocol } from "./todo.repository.protocol";
+import { FindTodoResponseViewModel } from "src/presentation/todos/view-model/find-todo-vm";
 import { InternalServerErrorException, Injectable } from "@nestjs/common";
 
 @Injectable()
@@ -15,6 +16,26 @@ export class TodoRepository implements TodoRepositoryProtocol {
     } catch (error) {
       throw new InternalServerErrorException(
         "Erro inesperado ao criar a tarefa!"
+      );
+    }
+  }
+
+  async findAll(): Promise<FindTodoResponseViewModel[]> {
+    try {
+      const todos = await this.prisma.todo.findMany({
+        select: {
+          id: true,
+          title: true,
+          status: true,
+          description: true,
+          createdAt: true,
+          category: true,
+        },
+      });
+      return todos;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        "Erro inesperado ao trazer as tarefas!"
       );
     }
   }
