@@ -7,3 +7,5 @@ export abstract class TodoRepositoryProtocol {
   abstract findAll(): Promise<FindTodoResponseViewModel[]>;
   abstract findById(id: string): Promise<FindTodoResponseViewModel>;
   abstract update(id: string, data: TodoInputDTO): Promise<Todo>;
+  abstract delete(id: string): Promise<void>;
+}

@@ -10,6 +10,7 @@ import {
   GetTodosService,
   FindTodoService,
   UpdateTodoService,
+  DeleteTodoService,
 } from "src/application/todos/use-cases";
 
 @Module({
@@ -20,6 +21,7 @@ import {
     GetTodosService,
     FindTodoService,
     UpdateTodoService,
+    DeleteTodoService,
     {
       provide: TodoRepositoryProtocol,
       useClass: TodoRepository,
