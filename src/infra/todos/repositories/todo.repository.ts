@@ -63,4 +63,19 @@ export class TodoRepository implements TodoRepositoryProtocol {
       );
     }
   }
+
+  async update(id: string, data: TodoInputDTO): Promise<Todo> {
+    try {
+      const updatedTodo = await this.prisma.todo.update({
+        where: { id },
+        data,
+      });
+
+      return updatedTodo;
+    } catch (error) {
+      throw new InternalServerErrorException(
+        "Erro inesperado ao atualizar a tarefa!"
+      );
+    }
+  }
 }
