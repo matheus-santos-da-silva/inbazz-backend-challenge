@@ -5,4 +5,5 @@ import { FindTodoResponseViewModel } from "src/presentation/todos/view-model/fin
 export abstract class TodoRepositoryProtocol {
   abstract create(data: TodoInputDTO): Promise<Todo>;
   abstract findAll(): Promise<FindTodoResponseViewModel[]>;
+  abstract findById(id: string): Promise<FindTodoResponseViewModel>;
 }
