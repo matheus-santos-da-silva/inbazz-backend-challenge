@@ -8,6 +8,7 @@ import {
   CreateTodoService,
   GetTodosService,
   FindTodoService,
+  UpdateTodoService,
 } from "src/application/todos/use-cases/";
 import {
   Body,
@@ -16,6 +17,7 @@ import {
   Get,
   Param,
   Post,
+  Put,
   UseInterceptors,
 } from "@nestjs/common";
 
@@ -25,7 +27,8 @@ export class TodoController {
   constructor(
     private readonly createTodo: CreateTodoService,
     private readonly getTodos: GetTodosService,
-    private readonly findTodo: FindTodoService
+    private readonly findTodo: FindTodoService,
+    private readonly updateTodo: UpdateTodoService
   ) {}
 
   @ApiOperation({ summary: "Create Todo" })
@@ -76,6 +79,27 @@ export class TodoController {
     try {
       const todo = await this.findTodo.findById(id);
       return todo;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @ApiOperation({ summary: "Update Todo" })
+  @ApiResponse({
+    status: 200,
+    description: "Success",
+    type: TodoResponseViewModel,
+  })
+  @ApiResponse(HttpNotFoundError)
+  @ApiResponse(HttpBadRequestError)
+  @Put(":id")
+  async update(
+    @Param("id") id: string,
+    @Body() data: TodoInputDTO
+  ): Promise<TodoResponseViewModel> {
+    try {
+      const updatedTodo = await this.updateTodo.update(id, data);
+      return plainToInstance(TodoResponseViewModel, updatedTodo);
     } catch (error) {
       throw error;
     }
