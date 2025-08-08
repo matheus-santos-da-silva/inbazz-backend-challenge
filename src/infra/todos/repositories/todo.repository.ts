@@ -78,4 +78,14 @@ export class TodoRepository implements TodoRepositoryProtocol {
       );
     }
   }
+
+  async delete(id: string): Promise<void> {
+    try {
+      await this.prisma.todo.delete({ where: { id } });
+    } catch (error) {
+      throw new InternalServerErrorException(
+        "Erro inesperado ao excluir a tarefa!"
+      );
+    }
+  }
 }

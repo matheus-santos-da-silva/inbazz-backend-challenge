@@ -9,12 +9,15 @@ import {
   GetTodosService,
   FindTodoService,
   UpdateTodoService,
+  DeleteTodoService,
 } from "src/application/todos/use-cases/";
 import {
   Body,
   ClassSerializerInterceptor,
   Controller,
+  Delete,
   Get,
+  HttpCode,
   Param,
   Post,
   Put,
@@ -28,7 +31,8 @@ export class TodoController {
     private readonly createTodo: CreateTodoService,
     private readonly getTodos: GetTodosService,
     private readonly findTodo: FindTodoService,
-    private readonly updateTodo: UpdateTodoService
+    private readonly updateTodo: UpdateTodoService,
+    private readonly deleteTodo: DeleteTodoService
   ) {}
 
   @ApiOperation({ summary: "Create Todo" })
@@ -100,6 +104,22 @@ export class TodoController {
     try {
       const updatedTodo = await this.updateTodo.update(id, data);
       return plainToInstance(TodoResponseViewModel, updatedTodo);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @ApiOperation({ summary: "Delete Todo" })
+  @ApiResponse({
+    status: 204,
+    description: "Success",
+  })
+  @ApiResponse(HttpNotFoundError)
+  @HttpCode(204)
+  @Delete(":id")
+  async delete(@Param("id") id: string): Promise<void> {
+    try {
+      await this.deleteTodo.delete(id);
     } catch (error) {
       throw error;
     }
