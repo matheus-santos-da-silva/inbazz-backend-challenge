@@ -1,14 +1,29 @@
 import { TodoInputDTO } from "./dtos/todo-input.dto";
-import { CreateTodoService } from "src/application/todos/use-cases/";
+import { plainToInstance } from "class-transformer";
 import { TodoResponseViewModel } from "./view-model/todo-vm";
-import { Body, Controller, Post } from "@nestjs/common";
+import { FindTodoResponseViewModel } from "./view-model/find-todo-vm";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 import { HttpBadRequestError, HttpNotFoundError } from "../swagger/http-errors";
+import {
+  CreateTodoService,
+  GetTodosService,
+} from "src/application/todos/use-cases/";
+import {
+  Body,
+  ClassSerializerInterceptor,
+  Controller,
+  Get,
+  Post,
+  UseInterceptors,
+} from "@nestjs/common";
 
 @ApiTags("TODOS")
 @Controller("todos")
 export class TodoController {
-  constructor(private readonly createTodo: CreateTodoService) {}
+  constructor(
+    private readonly createTodo: CreateTodoService,
+    private readonly getTodos: GetTodosService
+  ) {}
 
   @ApiOperation({ summary: "Create Todo" })
   @ApiResponse({
@@ -18,11 +33,29 @@ export class TodoController {
   })
   @ApiResponse(HttpBadRequestError)
   @ApiResponse(HttpNotFoundError)
+  @UseInterceptors(ClassSerializerInterceptor)
   @Post()
   async create(@Body() data: TodoInputDTO): Promise<TodoResponseViewModel> {
     try {
       const todo = await this.createTodo.create(data);
-      return todo;
+      return plainToInstance(TodoResponseViewModel, todo);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  @ApiOperation({ summary: "Get All Todos" })
+  @ApiResponse({
+    status: 200,
+    description: "Success",
+    type: FindTodoResponseViewModel,
+    isArray: true,
+  })
+  @Get()
+  async getAll(): Promise<FindTodoResponseViewModel[]> {
+    try {
+      const todos = await this.getTodos.findAll();
+      return todos;
     } catch (error) {
       throw error;
     }
