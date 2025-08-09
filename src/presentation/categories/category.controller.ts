@@ -1,7 +1,17 @@
+import { AuthGuard } from "src/application/auth/guards/auth.guard";
 import { CategoryInputDTO } from "./dtos/category-input.dto";
 import { CategoryResponseViewModel } from "./view-models/category-vm";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { HttpBadRequestError, HttpNotFoundError } from "../swagger/http-errors";
+import {
+  ApiBearerAuth,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
+import {
+  HttpBadRequestError,
+  HttpNotFoundError,
+  HttpUnauthorizedError,
+} from "../swagger/http-errors";
 import {
   Body,
   Controller,
@@ -11,6 +21,7 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
 } from "@nestjs/common";
 import {
   CreateCategoryService,
@@ -32,12 +43,15 @@ export class CategoryController {
   ) {}
 
   @ApiOperation({ summary: "Create Category" })
+  @ApiBearerAuth("access-token")
   @ApiResponse({
     status: 201,
     description: "Created",
     type: CategoryResponseViewModel,
   })
   @ApiResponse(HttpBadRequestError)
+  @ApiResponse(HttpUnauthorizedError)
+  @UseGuards(AuthGuard)
   @Post()
   async create(
     @Body() data: CategoryInputDTO
@@ -87,14 +101,17 @@ export class CategoryController {
   }
 
   @ApiOperation({ summary: "Update Category" })
+  @ApiBearerAuth("access-token")
   @ApiResponse({
     status: 200,
     description: "Success",
     type: CategoryResponseViewModel,
   })
-  @Put(":id")
   @ApiResponse(HttpBadRequestError)
   @ApiResponse(HttpNotFoundError)
+  @ApiResponse(HttpUnauthorizedError)
+  @UseGuards(AuthGuard)
+  @Put(":id")
   async update(
     @Param("id") id: string,
     @Body() data: CategoryInputDTO
@@ -108,13 +125,16 @@ export class CategoryController {
   }
 
   @ApiOperation({ summary: "Delete Category" })
+  @ApiBearerAuth("access-token")
   @ApiResponse({
     status: 204,
     description: "Success",
   })
-  @Delete(":id")
   @ApiResponse(HttpNotFoundError)
+  @ApiResponse(HttpUnauthorizedError)
   @HttpCode(204)
+  @UseGuards(AuthGuard)
+  @Delete(":id")
   async delete(@Param("id") id: string): Promise<void> {
     try {
       await this.deleteCategory.delete(id);

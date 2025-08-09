@@ -1,9 +1,20 @@
+import { AuthGuard } from "src/application/auth/guards/auth.guard";
 import { TodoInputDTO } from "./dtos/todo-input.dto";
 import { plainToInstance } from "class-transformer";
 import { TodoResponseViewModel } from "./view-model/todo-vm";
 import { FindTodoResponseViewModel } from "./view-model/find-todo-vm";
-import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { HttpBadRequestError, HttpNotFoundError } from "../swagger/http-errors";
+import {
+  ApiBearerAuth,
+  ApiHeader,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from "@nestjs/swagger";
+import {
+  HttpBadRequestError,
+  HttpNotFoundError,
+  HttpUnauthorizedError,
+} from "../swagger/http-errors";
 import {
   CreateTodoService,
   GetTodosService,
@@ -21,7 +32,9 @@ import {
   Param,
   Post,
   Put,
+  UseGuards,
   UseInterceptors,
+  Headers,
 } from "@nestjs/common";
 
 @ApiTags("TODOS")
@@ -36,6 +49,7 @@ export class TodoController {
   ) {}
 
   @ApiOperation({ summary: "Create Todo" })
+  @ApiBearerAuth("access-token")
   @ApiResponse({
     status: 201,
     description: "Created",
@@ -43,7 +57,9 @@ export class TodoController {
   })
   @ApiResponse(HttpBadRequestError)
   @ApiResponse(HttpNotFoundError)
+  @ApiResponse(HttpUnauthorizedError)
   @UseInterceptors(ClassSerializerInterceptor)
+  @UseGuards(AuthGuard)
   @Post()
   async create(@Body() data: TodoInputDTO): Promise<TodoResponseViewModel> {
     try {
@@ -89,6 +105,7 @@ export class TodoController {
   }
 
   @ApiOperation({ summary: "Update Todo" })
+  @ApiBearerAuth("access-token")
   @ApiResponse({
     status: 200,
     description: "Success",
@@ -96,6 +113,8 @@ export class TodoController {
   })
   @ApiResponse(HttpNotFoundError)
   @ApiResponse(HttpBadRequestError)
+  @ApiResponse(HttpUnauthorizedError)
+  @UseGuards(AuthGuard)
   @Put(":id")
   async update(
     @Param("id") id: string,
@@ -110,12 +129,15 @@ export class TodoController {
   }
 
   @ApiOperation({ summary: "Delete Todo" })
+  @ApiBearerAuth("access-token")
   @ApiResponse({
     status: 204,
     description: "Success",
   })
   @ApiResponse(HttpNotFoundError)
+  @ApiResponse(HttpUnauthorizedError)
   @HttpCode(204)
+  @UseGuards(AuthGuard)
   @Delete(":id")
   async delete(@Param("id") id: string): Promise<void> {
     try {

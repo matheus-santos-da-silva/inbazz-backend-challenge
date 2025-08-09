@@ -1,4 +1,5 @@
 import { Module } from "@nestjs/common";
+import { AuthModule } from "./auth.module";
 import { PrismaModule } from "src/infra/database/config/prisma.module";
 import { TodoController } from "src/presentation/todos/todo.controller";
 import { TodoRepository } from "src/infra/todos/repositories/todo.repository";
@@ -14,7 +15,7 @@ import {
 } from "src/application/todos/use-cases";
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, AuthModule],
   controllers: [TodoController],
   providers: [
     CreateTodoService,
