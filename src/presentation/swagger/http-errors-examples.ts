@@ -33,3 +33,20 @@ export class NotFoundResponseExample {
   })
   error: string;
 }
+
+export class UnauthorizedResponseExample {
+  @ApiProperty({
+    example: 401,
+  })
+  statusCode: number;
+
+  @ApiProperty({
+    example: "Não autorizado!",
+  })
+  message: string;
+
+  @ApiProperty({
+    example: "Unauthorized",
+  })
+  error: string;
+}

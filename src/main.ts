@@ -16,6 +16,15 @@ async function bootstrap() {
     .setTitle("Todo List")
     .setDescription("Inbazz Backend Challenge - TODO List")
     .setVersion("1")
+    .addBearerAuth(
+      {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        description: "Insira o token JWT aqui",
+      },
+      "access-token"
+    )
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
