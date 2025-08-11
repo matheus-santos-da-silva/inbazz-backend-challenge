@@ -1,4 +1,5 @@
 import { Todo } from "src/domain/todos/todo.entity";
+import { Status } from "@prisma/client";
 import { TodoInputDTO } from "src/presentation/todos/dtos/todo-input.dto";
 import { PrismaService } from "src/infra/database/config/prisma.service";
 import { TodoRepositoryProtocol } from "./todo.repository.protocol";
@@ -20,9 +21,18 @@ export class TodoRepository implements TodoRepositoryProtocol {
     }
   }
 
-  async findAll(): Promise<FindTodoResponseViewModel[]> {
+  async findAll(
+    categoryId?: string,
+    status?: Status
+  ): Promise<FindTodoResponseViewModel[]> {
     try {
+      let where: { categoryId?: string; status?: Status } = {};
+
+      if (status) where.status = status;
+      if (categoryId) where.categoryId = categoryId;
+
       const todos = await this.prisma.todo.findMany({
+        where,
         select: {
           id: true,
           title: true,

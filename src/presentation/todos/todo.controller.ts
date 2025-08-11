@@ -1,12 +1,13 @@
 import { AuthGuard } from "src/application/auth/guards/auth.guard";
 import { TodoInputDTO } from "./dtos/todo-input.dto";
 import { plainToInstance } from "class-transformer";
+import { FindTodosQueryDto } from "./dtos/find-todos-query.dto";
 import { TodoResponseViewModel } from "./view-model/todo-vm";
 import { FindTodoResponseViewModel } from "./view-model/find-todo-vm";
 import {
   ApiBearerAuth,
-  ApiHeader,
   ApiOperation,
+  ApiQuery,
   ApiResponse,
   ApiTags,
 } from "@nestjs/swagger";
@@ -34,7 +35,8 @@ import {
   Put,
   UseGuards,
   UseInterceptors,
-  Headers,
+  Query,
+  ValidationPipe,
 } from "@nestjs/common";
 
 @ApiTags("TODOS")
@@ -77,10 +79,25 @@ export class TodoController {
     type: FindTodoResponseViewModel,
     isArray: true,
   })
+  @ApiResponse(HttpNotFoundError)
+  @ApiQuery({
+    name: "categoryId",
+    required: false,
+    type: String,
+    description: "Id da Categoria da tarefa para filtrar",
+  })
+  @ApiQuery({
+    name: "status",
+    required: false,
+    type: String,
+    description: "Status da tarefa para filtrar (ex: PENDING, COMPLETED)",
+  })
   @Get()
-  async getAllTodos(): Promise<FindTodoResponseViewModel[]> {
+  async getAllTodos(
+    @Query(new ValidationPipe({ transform: true })) query: FindTodosQueryDto
+  ): Promise<FindTodoResponseViewModel[]> {
     try {
-      const todos = await this.getTodos.findAll();
+      const todos = await this.getTodos.findAll(query.categoryId, query.status);
       return todos;
     } catch (error) {
       throw error;
