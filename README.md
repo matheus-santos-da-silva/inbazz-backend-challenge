@@ -21,28 +21,37 @@ JWT_SECRET=shDWB210!87
 ### 4 - Na raiz do projeto rode o comando para o build:
 
 ```
-docker compose up
+docker compose up -d
 ```
 
 ### 5 - Após finalizar o build, acesse localmente pelo navegador pela url: localhost:3000/api
 
-## Como rodar os testes:
+## Como rodar os testes unitários:
 
-### 1 - Faça o build da aplicação caso ainda não tenha feito;
-
-### 2 - Instale as dependências localmente:
+### 1 - Instale as dependências localmente:
 
 ```
 yarn install
 ```
 
-### 3 - Rode os testes unitários:
+### 2 - Rode o seguinte comando do prisma:
+
+```
+yarn prisma generate
+```
+
+### 3 - Rode os testes:
 
 ```
 yarn run test:unit
+
 ```
 
-### 4 - Rode os testes e2e:
+## Como rodar os testes e2e:
+
+### 1 - Tenha o projeto rodando:
+
+### 2 - No seu terminal rode os testes:
 
 ```
 yarn run test:e2e
