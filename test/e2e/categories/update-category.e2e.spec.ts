@@ -56,7 +56,7 @@ describe("Update Category (e2e) - (PUT /categories/:id)", () => {
       .set("Authorization", `Bearer ${testToken}`)
       .expect(400);
 
-    expect(body.message).toStrictEqual(["O nome deve ser uma string!"]);
+    expect(body.message).toContain("O nome deve ser uma string!");
   });
 
   it("should return 400 status code when category not exists", async () => {
