@@ -7,10 +7,14 @@
 ```
 git clone https://github.com/matheus-santos-da-silva/inbazz-backend-challenge
 ```
+### 2 - Entre na pasta do projeto e abra com o editor:
+```
+cd inbazz-backend-challenge
+code .
+```
+### 3 - Renomeie o arquivo .env.example para .env
 
-### 2 - Renomeie o arquivo .env.example para .env
-
-### 3 - Dentro de .env coloque estas variáveis:
+### 4 - Dentro de .env coloque estas variáveis:
 
 ```
 PORT=3000
@@ -18,13 +22,14 @@ DATABASE_URL=postgresql://postgres:postgres@localhost:5432/inbazz-challenge?sche
 JWT_SECRET=shDWB210!87
 ```
 
-### 4 - Na raiz do projeto rode o comando para o build:
+### 5 - Na raiz do projeto rode o comando para o build:
 
 ```
 docker compose up -d
 ```
+### 6 - Após finalizar o build, acesse localmente pelo navegador pela url: localhost:3000/api
 
-### 5 - Após finalizar o build, acesse localmente pelo navegador pela url: localhost:3000/api
+#### Obs: Para testar as rotas privadas, gere o token, copie-o e autentique clicando no botão "Authorize" gerado pelo Swagger.
 
 ## Como rodar os testes unitários:
 
@@ -59,8 +64,6 @@ yarn run test:e2e
 
 ## Arquitetura:
 
-### Trabalhando com Use Cases
-
 #### **Domain:**
 
 A camada central e mais interna da aplicação é onde são entidades.
@@ -85,3 +88,4 @@ Esta camada é a que acessa serviços externos, como banco de dados, sistemas de
 - Prisma
 - PostgreSQL
 - Docker
+- Swagger
