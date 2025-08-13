@@ -5,7 +5,7 @@
 ### 1 - Clone este repositório:
 
 ```
-$ git clone https://github.com/matheus-santos-da-silva/inbazz-backend-challenge
+git clone https://github.com/matheus-santos-da-silva/inbazz-backend-challenge
 ```
 
 ### 2 - Renomeie o arquivo .env.example para .env
