@@ -13,10 +13,6 @@ export class CreateCategoryService implements CreateCategoryServiceProtocol {
   async create(data: CategoryInputDTO): Promise<Category> {
     try {
       const category = await this.categoryRepository.create(data);
-      if (!category) {
-        throw new BadRequestException("Erro inesperado ao criar categoria!");
-      }
-
       return category;
     } catch (error) {
       throw error;
